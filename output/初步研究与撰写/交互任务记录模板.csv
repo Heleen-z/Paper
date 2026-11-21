@@ -1,0 +1,1 @@
+﻿case_id,task_type,interface_condition,input_instruction,initial_state,expected_final_state,actual_final_state,success,budget_overrun,duplicate_annotation,recovery_consistent,invalid_tool_calls,operations,elapsed_seconds,real_or_simulated_backend,event_log_path,failure_reason

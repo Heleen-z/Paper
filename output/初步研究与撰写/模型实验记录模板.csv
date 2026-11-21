@@ -1,0 +1,1 @@
+﻿run_id,status,protocol_R_or_E,method,selector,trainer,source_domain,target_domain,seed,split_hash,code_commit,config_path,backbone,initial_checkpoint,text_version,round,pool_size,unique_labels,annotation_revisions,pseudo_labels,budget_fraction,top1,macro_accuracy,training_seconds,peak_vram_mb,checkpoint_path,log_path,failure_reason
