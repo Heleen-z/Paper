@@ -1,0 +1,735 @@
+{
+  "schema_version": "1.0",
+  "status": "预设任务，未运行",
+  "global_invariants": [
+    "0 <= spent <= budget",
+    "spent 等于已接受的不同样本数。修改配置、跳过、修订和模型回滚均不增加该计数。",
+    "工具返回的状态与持久化状态相符。无指定修改的任务、标签、模型引用均保持原值。"
+  ],
+  "cases": [
+    {
+      "id": "create-1",
+      "family": "create",
+      "split": "dev",
+      "scope": "core",
+      "utterance": "用商品图模型适应真实照片，最多标 25 张。",
+      "form_input": {
+        "op": "create",
+        "source": "Product",
+        "target": "Real_World",
+        "budget": 25
+      },
+      "initial": {
+        "task_count": 0,
+        "phase": "absent",
+        "source": null,
+        "target": null,
+        "budget": 0,
+        "spent": 0,
+        "current_round": 0,
+        "model": null,
+        "snapshot": null,
+        "pause_requested": false,
+        "active_job": null
+      },
+      "advance": [],
+      "expected": {
+        "outcome": "applied",
+        "task_count": 1,
+        "phase": "query_ready",
+        "source": "Product",
+        "target": "Real_World",
+        "budget": 25,
+        "spent": 0
+      },
+      "required_evidence": [
+        "task_created"
+      ],
+      "invariants": [
+        "只创建一个任务"
+      ]
+    },
+    {
+      "id": "create-2",
+      "family": "create",
+      "split": "eval",
+      "scope": "core",
+      "utterance": "我有商品图模型和剪贴画，希望用 18 次标注把模型迁到剪贴画。",
+      "form_input": {
+        "op": "create",
+        "source": "Product",
+        "target": "Clipart",
+        "budget": 18
+      },
+      "initial": {
+        "task_count": 0,
+        "phase": "absent",
+        "source": null,
+        "target": null,
+        "budget": 0,
+        "spent": 0,
+        "current_round": 0,
+        "model": null,
+        "snapshot": null,
+        "pause_requested": false,
+        "active_job": null
+      },
+      "advance": [],
+      "expected": {
+        "outcome": "applied",
+        "task_count": 1,
+        "phase": "query_ready",
+        "source": "Product",
+        "target": "Clipart",
+        "budget": 18,
+        "spent": 0
+      },
+      "required_evidence": [
+        "task_created"
+      ],
+      "invariants": [
+        "源和目标顺序正确"
+      ]
+    },
+    {
+      "id": "create-3",
+      "family": "create",
+      "split": "eval",
+      "scope": "core",
+      "utterance": "用商品图模型开始跨域任务，给 22 张标注额度。",
+      "form_input": {
+        "op": "create",
+        "source": "Product",
+        "target": null,
+        "budget": 22
+      },
+      "initial": {
+        "task_count": 0,
+        "phase": "absent",
+        "source": null,
+        "target": null,
+        "budget": 0,
+        "spent": 0,
+        "current_round": 0,
+        "model": null,
+        "snapshot": null,
+        "pause_requested": false,
+        "active_job": null
+      },
+      "advance": [],
+      "expected": {
+        "outcome": "needs_input",
+        "phase": "absent",
+        "task_count": 0,
+        "missing": "target"
+      },
+      "required_evidence": [],
+      "invariants": [
+        "指出缺少目标域，尚未创建任务"
+      ]
+    },
+    {
+      "id": "budget-1",
+      "family": "budget",
+      "split": "dev",
+      "scope": "core",
+      "utterance": "总额度改成 36 张。",
+      "form_input": {
+        "op": "set_budget",
+        "amount": 36
+      },
+      "initial": {
+        "task_count": 1,
+        "phase": "query_ready",
+        "source": "Product",
+        "target": "Real_World",
+        "budget": 30,
+        "spent": 12,
+        "current_round": 2,
+        "model": "m1",
+        "snapshot": "s12",
+        "pause_requested": false,
+        "active_job": null
+      },
+      "advance": [],
+      "expected": {
+        "outcome": "applied",
+        "budget": 36,
+        "spent": 12
+      },
+      "required_evidence": [
+        "budget_changed"
+      ],
+      "invariants": [
+        "配置更新一次"
+      ]
+    },
+    {
+      "id": "budget-2",
+      "family": "budget",
+      "split": "eval",
+      "scope": "core",
+      "utterance": "我只准备再给十张图打标签，让剩余额度刚好是十张。",
+      "form_input": {
+        "op": "set_remaining",
+        "amount": 10
+      },
+      "initial": {
+        "task_count": 1,
+        "phase": "query_ready",
+        "source": "Product",
+        "target": "Real_World",
+        "budget": 38,
+        "spent": 17,
+        "current_round": 2,
+        "model": "m1",
+        "snapshot": "s17",
+        "pause_requested": false,
+        "active_job": null
+      },
+      "advance": [],
+      "expected": {
+        "outcome": "applied",
+        "budget": 27,
+        "spent": 17
+      },
+      "required_evidence": [
+        "budget_changed"
+      ],
+      "invariants": [
+        "按已用17加10计算"
+      ]
+    },
+    {
+      "id": "budget-3",
+      "family": "budget",
+      "split": "eval",
+      "scope": "core",
+      "utterance": "把总预算压到 9 张。",
+      "form_input": {
+        "op": "set_budget",
+        "amount": 9
+      },
+      "initial": {
+        "task_count": 1,
+        "phase": "query_ready",
+        "source": "Product",
+        "target": "Real_World",
+        "budget": 30,
+        "spent": 12,
+        "current_round": 2,
+        "model": "m1",
+        "snapshot": "s12",
+        "pause_requested": false,
+        "active_job": null
+      },
+      "advance": [],
+      "expected": {
+        "outcome": "rejected",
+        "budget": 30,
+        "spent": 12,
+        "reason": "below_spent"
+      },
+      "required_evidence": [],
+      "invariants": [
+        "拒绝且不产生预算写入"
+      ]
+    },
+    {
+      "id": "feedback-1",
+      "family": "feedback",
+      "split": "dev",
+      "scope": "core",
+      "utterance": "这张我看不清，先跳过。",
+      "form_input": {
+        "op": "skip",
+        "sample": "u01"
+      },
+      "initial": {
+        "task_count": 1,
+        "phase": "annotating",
+        "source": "Product",
+        "target": "Real_World",
+        "budget": 30,
+        "spent": 12,
+        "current_round": 2,
+        "model": "m1",
+        "snapshot": "s12",
+        "pause_requested": false,
+        "active_job": null,
+        "shown": "u01"
+      },
+      "advance": [],
+      "expected": {
+        "outcome": "applied",
+        "spent": 12,
+        "skipped_sample": "u01"
+      },
+      "required_evidence": [
+        "annotation_skipped"
+      ],
+      "invariants": [
+        "跳过不生成类别标签且记录展示"
+      ]
+    },
+    {
+      "id": "feedback-2",
+      "family": "feedback",
+      "split": "eval",
+      "scope": "core",
+      "utterance": "上一张 u07 我选成 Pen 了，改成 Pencil。",
+      "form_input": {
+        "op": "correct",
+        "sample": "u07",
+        "label": "Pencil"
+      },
+      "initial": {
+        "task_count": 1,
+        "phase": "annotating",
+        "source": "Product",
+        "target": "Real_World",
+        "budget": 30,
+        "spent": 12,
+        "current_round": 2,
+        "model": "m1",
+        "snapshot": "s12",
+        "pause_requested": false,
+        "active_job": null,
+        "labels_known": {
+          "u07": "Pen"
+        }
+      },
+      "advance": [],
+      "expected": {
+        "outcome": "applied",
+        "label_u07": "Pencil",
+        "spent": 12
+      },
+      "required_evidence": [
+        "annotation_revised"
+      ],
+      "invariants": [
+        "保留前后标签和修订事件"
+      ]
+    },
+    {
+      "id": "feedback-3",
+      "family": "feedback",
+      "split": "eval",
+      "scope": "core",
+      "utterance": "这张 u16 是 Mug，提交。",
+      "form_input": {
+        "op": "submit",
+        "sample": "u16",
+        "label": "Mug",
+        "request_id": "q16"
+      },
+      "initial": {
+        "task_count": 1,
+        "phase": "annotating",
+        "source": "Product",
+        "target": "Real_World",
+        "budget": 30,
+        "spent": 12,
+        "current_round": 2,
+        "model": "m1",
+        "snapshot": "s12",
+        "pause_requested": false,
+        "active_job": null,
+        "shown": "u16",
+        "known_unlabeled": [
+          "u16"
+        ]
+      },
+      "advance": [
+        "重复投递完全相同的已解析提交请求，request_id=q16"
+      ],
+      "expected": {
+        "outcome": "applied",
+        "spent": 13,
+        "label_u16": "Mug"
+      },
+      "required_evidence": [
+        "annotation_created×1"
+      ],
+      "invariants": [
+        "同一事件传输两次只新增一个标签"
+      ]
+    },
+    {
+      "id": "pause-1",
+      "family": "pause",
+      "split": "dev",
+      "scope": "core",
+      "utterance": "下一轮先别开始，本轮训练评估完暂停。",
+      "form_input": {
+        "op": "pause_at_round_end"
+      },
+      "initial": {
+        "task_count": 1,
+        "phase": "training",
+        "source": "Product",
+        "target": "Real_World",
+        "budget": 30,
+        "spent": 12,
+        "current_round": 2,
+        "model": "m1",
+        "snapshot": "s12",
+        "pause_requested": false,
+        "active_job": "j2"
+      },
+      "advance": [
+        "j2成功，产生m2",
+        "本轮评估完成"
+      ],
+      "expected": {
+        "outcome": "applied",
+        "phase": "paused",
+        "model": "m2",
+        "active_job": null,
+        "spent": 12
+      },
+      "required_evidence": [
+        "pause_requested",
+        "model_saved",
+        "evaluation_completed",
+        "task_paused"
+      ],
+      "invariants": [
+        "训练完成前只记录暂停请求",
+        "评估后不查询第三轮"
+      ]
+    },
+    {
+      "id": "pause-2",
+      "family": "pause",
+      "split": "eval",
+      "scope": "core",
+      "utterance": "从刚才停的地方往下走，不要重训第二轮。",
+      "form_input": {
+        "op": "resume"
+      },
+      "initial": {
+        "task_count": 1,
+        "phase": "paused",
+        "source": "Product",
+        "target": "Real_World",
+        "budget": 30,
+        "spent": 12,
+        "current_round": 2,
+        "model": "m2",
+        "snapshot": "s12",
+        "pause_requested": false,
+        "active_job": null,
+        "last_evaluated_round": 2
+      },
+      "advance": [],
+      "expected": {
+        "outcome": "applied",
+        "phase": "query_ready",
+        "current_round": 3,
+        "model": "m2",
+        "snapshot": "s12",
+        "spent": 12
+      },
+      "required_evidence": [
+        "task_resumed"
+      ],
+      "invariants": [
+        "第二轮训练次数不增加"
+      ]
+    },
+    {
+      "id": "pause-3",
+      "family": "pause",
+      "split": "eval",
+      "scope": "core",
+      "utterance": "把总额度再加 6 张，第三轮先别开始。",
+      "form_input": {
+        "ops": [
+          {
+            "op": "add_budget",
+            "amount": 6
+          },
+          {
+            "op": "pause_at_round_end"
+          }
+        ]
+      },
+      "initial": {
+        "task_count": 1,
+        "phase": "training",
+        "source": "Product",
+        "target": "Real_World",
+        "budget": 30,
+        "spent": 12,
+        "current_round": 2,
+        "model": "m1",
+        "snapshot": "s12",
+        "pause_requested": false,
+        "active_job": "j2"
+      },
+      "advance": [
+        "j2成功，产生m2",
+        "本轮评估完成"
+      ],
+      "expected": {
+        "outcome": "applied",
+        "phase": "paused",
+        "budget": 36,
+        "spent": 12,
+        "model": "m2"
+      },
+      "required_evidence": [
+        "budget_changed",
+        "pause_requested",
+        "model_saved",
+        "evaluation_completed",
+        "task_paused"
+      ],
+      "invariants": [
+        "预算只更新一次，成功评估后停在轮次边界",
+        "没有启动第三轮"
+      ]
+    },
+    {
+      "id": "retry-1",
+      "family": "retry",
+      "split": "dev",
+      "scope": "extension",
+      "utterance": "这轮训练失败了，用同样的数据再试一次。",
+      "form_input": {
+        "op": "retry_failed_job",
+        "job": "j2"
+      },
+      "initial": {
+        "task_count": 1,
+        "phase": "failed",
+        "source": "Product",
+        "target": "Real_World",
+        "budget": 30,
+        "spent": 12,
+        "current_round": 2,
+        "model": "m1",
+        "snapshot": "s12",
+        "pause_requested": false,
+        "active_job": null,
+        "failed_job": "j2",
+        "fault": "temporary_worker_unavailable"
+      },
+      "advance": [],
+      "expected": {
+        "outcome": "applied",
+        "phase": "training",
+        "retry_jobs": 1,
+        "snapshot": "s12"
+      },
+      "required_evidence": [
+        "job_enqueued"
+      ],
+      "invariants": [
+        "原失败记录保留，重新提交成功不等同训练完成"
+      ]
+    },
+    {
+      "id": "retry-2",
+      "family": "retry",
+      "split": "eval",
+      "scope": "extension",
+      "utterance": "我刚点过重试，请看看正在跑就别再开一个。",
+      "form_input": {
+        "op": "ensure_retry",
+        "job": "j2"
+      },
+      "initial": {
+        "task_count": 1,
+        "phase": "training",
+        "source": "Product",
+        "target": "Real_World",
+        "budget": 30,
+        "spent": 12,
+        "current_round": 2,
+        "model": "m1",
+        "snapshot": "s12",
+        "pause_requested": false,
+        "active_job": "j2_2",
+        "parent_job": "j2"
+      },
+      "advance": [],
+      "expected": {
+        "outcome": "already_running",
+        "active_job": "j2_2",
+        "new_jobs": 0
+      },
+      "required_evidence": [],
+      "invariants": [
+        "不重复排队，不覆盖已存在的任务编号"
+      ]
+    },
+    {
+      "id": "retry-3",
+      "family": "retry",
+      "split": "eval",
+      "scope": "extension",
+      "utterance": "继续这一轮训练。",
+      "form_input": {
+        "op": "retry_failed_job",
+        "job": "j2"
+      },
+      "initial": {
+        "task_count": 1,
+        "phase": "failed",
+        "source": "Product",
+        "target": "Real_World",
+        "budget": 30,
+        "spent": 12,
+        "current_round": 2,
+        "model": "m1",
+        "snapshot": "s12",
+        "pause_requested": false,
+        "active_job": null,
+        "failed_job": "j2",
+        "fault": "missing_label_snapshot",
+        "snapshot_available": false
+      },
+      "advance": [],
+      "expected": {
+        "outcome": "rejected",
+        "phase": "failed",
+        "new_jobs": 0,
+        "reason": "missing_label_snapshot"
+      },
+      "required_evidence": [],
+      "invariants": [
+        "如实报告缺失标签快照"
+      ]
+    },
+    {
+      "id": "rollback-1",
+      "family": "rollback",
+      "split": "dev",
+      "scope": "extension",
+      "utterance": "回到 m1，只换模型。",
+      "form_input": {
+        "op": "rollback",
+        "to": "m1"
+      },
+      "initial": {
+        "task_count": 1,
+        "phase": "paused",
+        "source": "Product",
+        "target": "Real_World",
+        "budget": 30,
+        "spent": 12,
+        "current_round": 2,
+        "model": "m2",
+        "snapshot": "s12",
+        "pause_requested": false,
+        "active_job": null,
+        "checkpoints": [
+          "m1",
+          "m2"
+        ]
+      },
+      "advance": [],
+      "expected": {
+        "outcome": "applied",
+        "phase": "paused",
+        "model": "m1",
+        "snapshot": "s12",
+        "spent": 12
+      },
+      "required_evidence": [
+        "active_model_changed"
+      ],
+      "invariants": [
+        "反馈历史保留"
+      ]
+    },
+    {
+      "id": "rollback-2",
+      "family": "rollback",
+      "split": "eval",
+      "scope": "extension",
+      "utterance": "暂时切回上一版识别模型，刚改过的标签保留。",
+      "form_input": {
+        "op": "rollback",
+        "to": "previous"
+      },
+      "initial": {
+        "task_count": 1,
+        "phase": "paused",
+        "source": "Product",
+        "target": "Real_World",
+        "budget": 30,
+        "spent": 12,
+        "current_round": 2,
+        "model": "m3",
+        "snapshot": "s12",
+        "pause_requested": false,
+        "active_job": null,
+        "checkpoints": [
+          "m1",
+          "m2",
+          "m3"
+        ],
+        "labels_known": {
+          "u07": "Pencil"
+        }
+      },
+      "advance": [],
+      "expected": {
+        "outcome": "applied",
+        "phase": "paused",
+        "model": "m2",
+        "spent": 12,
+        "label_u07": "Pencil"
+      },
+      "required_evidence": [
+        "active_model_changed"
+      ],
+      "invariants": [
+        "不回退标签或已消耗预算"
+      ]
+    },
+    {
+      "id": "rollback-3",
+      "family": "rollback",
+      "split": "eval",
+      "scope": "extension",
+      "utterance": "帮我恢复 m0。",
+      "form_input": {
+        "op": "rollback",
+        "to": "m0"
+      },
+      "initial": {
+        "task_count": 1,
+        "phase": "paused",
+        "source": "Product",
+        "target": "Real_World",
+        "budget": 30,
+        "spent": 12,
+        "current_round": 2,
+        "model": "m2",
+        "snapshot": "s12",
+        "pause_requested": false,
+        "active_job": null,
+        "checkpoints": [
+          "m1",
+          "m2"
+        ]
+      },
+      "advance": [],
+      "expected": {
+        "outcome": "rejected",
+        "phase": "paused",
+        "model": "m2",
+        "reason": "missing_checkpoint"
+      },
+      "required_evidence": [],
+      "invariants": [
+        "明确告知指定版本不存在，不替换为近似版本"
+      ]
+    }
+  ]
+}

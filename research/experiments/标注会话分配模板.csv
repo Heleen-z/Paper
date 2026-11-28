@@ -1,0 +1,13 @@
+slot_id,block,anon_id,condition_sequence,batch_sequence,period_1_condition,period_1_batch,period_2_condition,period_2_batch,period_3_condition,period_3_batch,items_per_period,scheduled_at,session_status
+S01,1,,ABC,XYZ,A,X,B,Y,C,Z,12,,
+S02,1,,BCA,ZXY,B,Z,C,X,A,Y,12,,
+S03,1,,CAB,YZX,C,Y,A,Z,B,X,12,,
+S04,1,,ACB,XZY,A,X,C,Z,B,Y,12,,
+S05,1,,CBA,YXZ,C,Y,B,X,A,Z,12,,
+S06,1,,BAC,ZYX,B,Z,A,Y,C,X,12,,
+S07,2,,ABC,XYZ,A,X,B,Y,C,Z,12,,
+S08,2,,BCA,ZXY,B,Z,C,X,A,Y,12,,
+S09,2,,CAB,YZX,C,Y,A,Z,B,X,12,,
+S10,2,,ACB,XZY,A,X,C,Z,B,Y,12,,
+S11,2,,CBA,YXZ,C,Y,B,X,A,Z,12,,
+S12,2,,BAC,ZYX,B,Z,A,Y,C,X,12,,

@@ -1,0 +1,69 @@
+{
+  "entry": "structured deterministic actions on isolated SQLite databases",
+  "observation_unit": "one prewritten form-input case",
+  "total": 18,
+  "passed": 18,
+  "split": {
+    "dev": {
+      "passed": 6,
+      "total": 6
+    },
+    "eval": {
+      "passed": 12,
+      "total": 12
+    }
+  },
+  "scope": {
+    "core": {
+      "passed": 12,
+      "total": 12
+    },
+    "extension": {
+      "passed": 6,
+      "total": 6
+    }
+  },
+  "family": {
+    "budget": {
+      "passed": 3,
+      "total": 3
+    },
+    "create": {
+      "passed": 3,
+      "total": 3
+    },
+    "feedback": {
+      "passed": 3,
+      "total": 3
+    },
+    "pause": {
+      "passed": 3,
+      "total": 3
+    },
+    "retry": {
+      "passed": 3,
+      "total": 3
+    },
+    "rollback": {
+      "passed": 3,
+      "total": 3
+    }
+  },
+  "outcomes": {
+    "applied": 13,
+    "needs_input": 1,
+    "rejected": 3,
+    "already_running": 1
+  },
+  "source_sha256": {
+    "任务样例.json": "5c4fccc31c19e4bba18830fd71523658863dd0dd71b6371337cb40efd0167ff5",
+    "replay.py": "66297e617552043c67f7779bcb0dd3cfaf6021b21bdfdbc0f6179a1d98fe90b8",
+    "ledger.py": "2b2dd76008dcf76c54950218d3eaf5ef6ca37ebd01084c7855de8edfae40b99d"
+  },
+  "limitations": [
+    "Form inputs are pre-parsed; no language model or human subject in this run.",
+    "All initial labels, supplied checkpoints and worker callbacks are test fixtures.",
+    "Local elapsed time includes SQLite writes and scheduled callbacks; it is not user interaction time.",
+    "The case bank was visible during implementation; eval denotes a file partition, not a blind test."
+  ]
+}
